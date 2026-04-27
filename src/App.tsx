@@ -4,7 +4,7 @@ import './App.css'
 
 const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY
 
-async function extractTextFromPDF(file: File): Promise<string> {
+async function extractTextFromFile(file: File): Promise<string> {
   return new Promise((resolve) => {
     const reader = new FileReader()
     reader.onload = async (e) => {
@@ -39,7 +39,7 @@ Extract and analyze:
 5. INVESTMENT MEMO - 3-4 sentence plain English summary a non-finance person could understand
 6. VERDICT - Buy / Hold / Sell with confidence level (High/Medium/Low) and one sentence reason
 
-Format your response with clear headers using ## for each section. Be specific with numbers. If a metric isn't available, say N/A.
+Format your response with clear headers using ## for each section. Be specific with numbers. If a metric isn't available, say N/A. Do not use ** for bold, just write plainly.
 
 Document text:
 ${text}`
@@ -85,9 +85,9 @@ export default function App() {
     setAnalysis('')
 
     try {
-      const text = await extractTextFromPDF(file)
+      const text = await extractTextFromFile(file)
       if (!text || text.trim().length < 100) {
-        setError('Could not extract text from this file. Try a text-based PDF or paste the content directly.')
+        setError('Could not extract text from this file. Make sure you are uploading an HTML or TXT file, not a scanned PDF.')
         setLoading(false)
         return
       }
@@ -102,7 +102,11 @@ export default function App() {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: { 'application/pdf': ['.pdf'], 'text/plain': ['.txt'], 'text/html': ['.html', '.htm'] },
+    accept: { 
+      'application/pdf': ['.pdf'], 
+      'text/plain': ['.txt'],
+      'text/html': ['.html', '.htm']
+    },
     onDragEnter: () => setDragActive(true),
     onDragLeave: () => setDragActive(false),
     maxFiles: 1
@@ -144,10 +148,20 @@ export default function App() {
             <div className="drop-content">
               <div className="drop-icon">⬆</div>
               <p className="drop-title">{fileName || 'Drop your financial document here'}</p>
-              <p className="drop-sub">Supports PDF and TXT · 10-K, 10-Q, earnings reports, balance sheets</p>
+              <p className="drop-sub">Supports PDF · TXT · HTML</p>
               <button className="drop-btn">Choose File</button>
             </div>
           )}
+        </div>
+
+        <div className="instructions">
+          <div className="instructions-title">📋 How to get the best results</div>
+          <div className="instructions-steps">
+            <div className="step"><span className="step-num">1</span>Go to <strong>sec.gov</strong> and search for any public company</div>
+            <div className="step"><span className="step-num">2</span>Click on their most recent <strong>10-K</strong> annual report filing</div>
+            <div className="step"><span className="step-num">3</span>Open the <strong>.htm file</strong> and save it (Command+S) as "Web Page, HTML Only"</div>
+            <div className="step"><span className="step-num">4</span>Upload that file here for a full institutional-grade analysis</div>
+          </div>
         </div>
 
         {error && <div className="error-box">{error}</div>}
