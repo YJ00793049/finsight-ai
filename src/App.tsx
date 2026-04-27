@@ -102,7 +102,7 @@ export default function App() {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: { 'application/pdf': ['.pdf'], 'text/plain': ['.txt'] },
+    accept: { 'application/pdf': ['.pdf'], 'text/plain': ['.txt'], 'text/html': ['.html', '.htm'] },
     onDragEnter: () => setDragActive(true),
     onDragLeave: () => setDragActive(false),
     maxFiles: 1
