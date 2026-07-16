@@ -123,7 +123,7 @@ export default function App() {
             <span className="logo-icon">◈</span>
             <span className="logo-text">FinSight <span className="logo-sub">AI</span></span>
           </div>
-          <div className="header-tag">Powered by Artificio AI · Built by Yuvraj Jindal</div>
+          <div className="header-tag">Powered by <a href="https://artificio.ai" target="_blank">Artificio AI</a> · Built by Yuvraj Jindal</div>
         </div>
       </header>
 
